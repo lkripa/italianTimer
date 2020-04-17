@@ -27,6 +27,68 @@ class ViewController: UIViewController {
     @IBOutlet weak var textfield: UITextField!
     @IBOutlet weak var exerciseLabel: UILabel!
     
+     // Timer Format
+     func timeString(time:TimeInterval) -> String {
+         let hours = Int(time) / 3600
+         let minutes = Int(time) / 60 % 60
+         let seconds = Int(time) % 60
+         return String(format:"%02i:%02i:%02i", hours, minutes, seconds)
+     }
+     
+     // Verbal Countdown
+     func verbalCountdown(_ number: Int){
+        for i in 2...5 {
+             if number == i {
+                        speak("\(number)")
+             }
+         }
+     }
+     
+     // Exercise Settings
+     func rest(){
+         isExerciseOn = false
+         exerciseLabel.isHidden = false
+         exerciseLabel.text = "Ready in"
+     }
+    
+     // Exercise Settings
+     func exercise(){
+         isExerciseOn = true
+         exerciseLabel.isHidden = false
+         exerciseLabel.text = "Exercise"
+     }
+     
+     // MARK:- Reset Time
+     func start(){
+         timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerAction), userInfo:nil , repeats: true)
+     }
+     
+     // MARK:- Reset time to restart round
+     func reset(){
+         timer.invalidate()
+         restTime = setRestTime
+         counter = inputNumber + restTime
+         AudioServicesPlayAlertSound(SystemSoundID(1304)) // 1016 // 1322
+     }
+     
+     // MARK:- Speech Function
+     let synth = AVSpeechSynthesizer()
+     func speak(_ phrase: String) {
+                 let utterance = AVSpeechUtterance(string: phrase)
+                 utterance.voice = AVSpeechSynthesisVoice(language:
+                     "it-IT")
+                     //"en-US") // for English language
+                 
+                 if self.synth.isSpeaking == false {
+                     do{
+                         try audioSession.setCategory(AVAudioSession.Category.ambient, mode: .default)
+                     self.synth.speak(utterance)
+                     } catch {
+                         print("Speech Error")
+                     }
+                 }
+     }
+    
     // MARK:- Button Activation
     @IBAction func startTimer(sender: UIButton){
         // check if text field is not hidden and set number if empty
@@ -75,13 +137,6 @@ class ViewController: UIViewController {
             label_rounds.text = "Round: \(counter_rounds)"
         }
     }
-    // MARK:- Viewing Timer Format
-    func timeString(time:TimeInterval) -> String {
-        let hours = Int(time) / 3600
-        let minutes = Int(time) / 60 % 60
-        let seconds = Int(time) % 60
-        return String(format:"%02i:%02i:%02i", hours, minutes, seconds)
-    }
     
     // MARK:- Timer
     // As timer goes on, subtract counter, total time, and rest time
@@ -116,7 +171,6 @@ class ViewController: UIViewController {
                 verbalCountdown(restTime)
             
         default :
-            print(counter)
             label.text = "\(counter) seconds "
             exercise()
 
@@ -152,60 +206,7 @@ class ViewController: UIViewController {
             }
         }
     }
-    
-    // Verbal Countdown
-    func verbalCountdown(_ number: Int){
-       for i in 2...5 {
-            if number == i {
-                       speak("\(number)")
-            }
-        }
-    }
-    
-    // Exercise Settings
-    func rest(){
-        isExerciseOn = false
-        exerciseLabel.isHidden = false
-        exerciseLabel.text = "Ready in"
-    }
-   
-    // Exercise Settings
-    func exercise(){
-        isExerciseOn = true
-        exerciseLabel.isHidden = false
-        exerciseLabel.text = "Exercise"
-    }
-    
-    // MARK:- Reset Time
-    func start(){
-        timer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(timerAction), userInfo:nil , repeats: true)
-    }
-    
-    // MARK:- Reset time to restart round
-    func reset(){
-        timer.invalidate()
-        restTime = setRestTime
-        counter = inputNumber + restTime
-        AudioServicesPlayAlertSound(SystemSoundID(1304)) // 1016 // 1322
-    }
-    
-    // MARK:- Speech Function
-    let synth = AVSpeechSynthesizer()
-    func speak(_ phrase: String) {
-                let utterance = AVSpeechUtterance(string: phrase)
-                utterance.voice = AVSpeechSynthesisVoice(language:
-                    "it-IT")
-                    //"en-US") // for English language
-                
-                if self.synth.isSpeaking == false {
-                    do{
-                        try audioSession.setCategory(AVAudioSession.Category.ambient, mode: .default)
-                    self.synth.speak(utterance)
-                    } catch {
-                        print("Speech Error")
-                    }
-                }
-    }
+
     // MARK:- Initial app setup
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true);
@@ -253,5 +254,4 @@ class ViewController: UIViewController {
             view.frame.origin.y = 0
             }
         }
-
 }
