@@ -151,7 +151,6 @@ class ViewController: UIViewController {
                 counter = inputNumber + restTime
             }
         }
-  
     }
     
     // Verbal Countdown
@@ -207,7 +206,7 @@ class ViewController: UIViewController {
                     }
                 }
     }
-// MARK:- Initial app setup
+    // MARK:- Initial app setup
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true);
     }
