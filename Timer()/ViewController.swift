@@ -149,6 +149,7 @@ class ViewController: UIViewController {
         // When the counter gets to a certain time, case changes.
         switch counter {
         // if the case has a certain amount over the input number, then that is the rest time. Rest will be activated, else: the exercise time will be counting down.
+        
         case inputNumber..<(inputNumber + setRestTime) :
             // show rest time, else go to exercise countdown
             if restTime != 0 {
@@ -165,10 +166,10 @@ class ViewController: UIViewController {
             if restTime != 0 {
                     rest()
                     label.text = "\(restTime)"
-                } else {
-                    label.text = "GO"
-                }
-                verbalCountdown(restTime)
+            } else {
+                label.text = "GO"
+            }
+            verbalCountdown(restTime)
             
         default :
             label.text = "\(counter) seconds "
@@ -176,7 +177,7 @@ class ViewController: UIViewController {
 
         }
         // At the start: counter is 31 and input number is (input)
-        if counter == inputNumber {
+        if counter == (inputNumber){
             exercise()
             speak("Esercizio")
             AudioServicesPlayAlertSound(SystemSoundID(1333))
