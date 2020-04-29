@@ -177,6 +177,7 @@ class ViewController: UIViewController {
 
         }
         // At the start: counter is 31 and input number is (input)
+        
         if counter == (inputNumber){
             exercise()
             speak("Esercizio")
@@ -224,8 +225,8 @@ class ViewController: UIViewController {
         
         self.view.backgroundColor = UIColor.black
         self.label.textColor = UIColor.white
-        self.label_total.textColor = UIColor.white
-        self.label_rounds.textColor = UIColor.white
+        // self.label_total.textColor = UIColor.darkGray
+        // self.label_rounds.textColor = UIColor.darkGray
     
         
         UIApplication.shared.isIdleTimerDisabled = true

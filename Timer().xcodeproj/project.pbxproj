@@ -16,7 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		8EBD62F322D62F1B009F6FB1 /* Timer().app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Timer().app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		8EBD62F322D62F1B009F6FB1 /* Esercizio.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Esercizio.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8EBD62F622D62F1B009F6FB1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8EBD62F822D62F1B009F6FB1 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		8EBD62FB22D62F1B009F6FB1 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -51,7 +51,7 @@
 		8EBD62F422D62F1B009F6FB1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8EBD62F322D62F1B009F6FB1 /* Timer().app */,
+				8EBD62F322D62F1B009F6FB1 /* Esercizio.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -86,7 +86,7 @@
 			);
 			name = "Timer()";
 			productName = "Timer()";
-			productReference = 8EBD62F322D62F1B009F6FB1 /* Timer().app */;
+			productReference = 8EBD62F322D62F1B009F6FB1 /* Esercizio.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -296,7 +296,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = lripa.Timer;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Esercizio;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -314,7 +314,7 @@
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = lripa.Timer;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Esercizio;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
