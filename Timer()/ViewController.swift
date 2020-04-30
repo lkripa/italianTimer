@@ -21,6 +21,7 @@ class ViewController: UIViewController {
     var isExerciseOn = true
     let audioSession = AVAudioSession.sharedInstance()
     
+    
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var label_rounds: UILabel!
     @IBOutlet weak var label_total: UILabel!
@@ -46,16 +47,17 @@ class ViewController: UIViewController {
      
      // Exercise Settings
      func rest(){
-         isExerciseOn = false
-         exerciseLabel.isHidden = false
-         exerciseLabel.text = "Ready in"
-     }
+        isExerciseOn = false
+        exerciseLabel.isHidden = false
+        exerciseLabel.text = "Ready in"
+
+    }
     
      // Exercise Settings
      func exercise(){
-         isExerciseOn = true
-         exerciseLabel.isHidden = false
-         exerciseLabel.text = "Exercise"
+        isExerciseOn = true
+        exerciseLabel.isHidden = false
+        exerciseLabel.text = "Exercise"
      }
      
      // MARK:- Reset Time
@@ -208,6 +210,7 @@ class ViewController: UIViewController {
             }
         }
     }
+    
 
     // MARK:- Initial app setup
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -216,15 +219,16 @@ class ViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         label.text = "Ready?"
         label_rounds.text = "Round: \(counter_rounds)"
         label_total.text = timeString(time: TimeInterval(totalTime))
         
         self.exerciseLabel.isHidden = true
-        self.exerciseLabel.textColor = UIColor.white
+        self.exerciseLabel.textColor = UIColor.black
         
         self.view.backgroundColor = UIColor.black
-        self.label.textColor = UIColor.white
+        self.label.textColor = UIColor.black
         // self.label_total.textColor = UIColor.darkGray
         // self.label_rounds.textColor = UIColor.darkGray
     
