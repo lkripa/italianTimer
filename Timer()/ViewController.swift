@@ -6,6 +6,11 @@
 //  Copyright © 2019 Lara Riparip. All rights reserved.
 //
 
+
+// THINGS TO DO:
+// it is currently slow after I hid the labels.
+// fix the 0 seconds in the start
+
 import UIKit
 import AVFoundation
 
@@ -15,12 +20,34 @@ class ViewController: UIViewController {
     var counter_rounds = 0
     var inputNumber = 31
     var totalTime = 0
-    var setRestTime = 20
-    var restTime = 21
+    var setRestTime = 10 //20
+    var restTime = 11 //21
     var isTimerRunning = false
     var isExerciseOn = true
     let audioSession = AVAudioSession.sharedInstance()
+    var isBootyOn = false
+    var rounds = 10
+    let bootyExercise = ["Jumping Squats",
+                         "Reverse Lunge Kick (Right)",
+                         "Reverse Lunge Kick (Left)",
+                         "Donkey Kick (Right)", "Pulse",
+                         "Donkey Kick (Left)", "Pulse",
+                         "Fire Hydrant (Right)", "Pulse",
+                         "Fire Hydrant (Left)", "Pulse",
+                         "Corner Kick (Right)", "Pulse",
+                         "Corner Kick (Left)", "Pulse",
+                         "Corner Up & Down (Right)",
+                         "Corner Up & Down (Left)",
+                         "Spider Kick (Right)", "Pulse",
+                         "Spider Kick (Left)", "Pulse",
+                         "Up/Down Bridge & Butterfly", "Pulse",
+                         "Clam (Right)", "Pulse",
+                         "Clam (Left)", "Pulse",
+                         "Forward & Backward Walk",
+                         "Side to Side Walk",
+                         "Tap Out (Right)", "Tap Out (Left)" ]
     
+    var currentExercise = ""
     
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var label_rounds: UILabel!
@@ -45,7 +72,7 @@ class ViewController: UIViewController {
          }
      }
      
-     // Exercise Settings
+     // Rest Settings
      func rest(){
         isExerciseOn = false
         exerciseLabel.isHidden = false
@@ -57,7 +84,11 @@ class ViewController: UIViewController {
      func exercise(){
         isExerciseOn = true
         exerciseLabel.isHidden = false
-        exerciseLabel.text = "Exercise"
+        if isBootyOn == false {
+            exerciseLabel.text = "Exercise"
+        } else {
+            exerciseLabel.text = currentExercise
+        }
      }
      
      // MARK:- Reset Time
@@ -69,6 +100,9 @@ class ViewController: UIViewController {
      func reset(){
          timer.invalidate()
          restTime = setRestTime
+         if currentExercise == "Pulse"{
+                    restTime = 1
+                }
          counter = inputNumber + restTime
          AudioServicesPlayAlertSound(SystemSoundID(1304)) // 1016 // 1322
      }
@@ -104,8 +138,15 @@ class ViewController: UIViewController {
                 counter = inputNumber
                 }
             }
+            if self.textfield.text! == "0" {
+                isBootyOn = true
+                rounds = bootyExercise.count
+                currentExercise = bootyExercise[counter_rounds]
+                exerciseLabel.text = currentExercise
+                speak("Preparatevi")
+            }
         }
-        
+
         // hide text field and stop editing
         textfield.isHidden = true
         self.view.endEditing(true)
@@ -125,10 +166,17 @@ class ViewController: UIViewController {
             start()
             label.isHidden = false
             if isExerciseOn == true {
-                speak("Esercizio")
-                exerciseLabel.text = "Exercise"
+                exerciseLabel.isHidden = false
+                if isBootyOn == false {
+                    exerciseLabel.text = "Exercise"
+                    speak("Esercizio")
+                } else {
+                    exerciseLabel.text = currentExercise
+                    speak("Esercizio")
+                }
             } else {
                 speak("Recupero")
+                exerciseLabel.isHidden = false
                 exerciseLabel.text = "Ready in"
             }
         }
@@ -138,6 +186,7 @@ class ViewController: UIViewController {
             counter_rounds = 1
             label_rounds.text = "Round: \(counter_rounds)"
         }
+        
     }
     
     // MARK:- Timer
@@ -156,8 +205,10 @@ class ViewController: UIViewController {
             // show rest time, else go to exercise countdown
             if restTime != 0 {
                 rest()
+                label.isHidden = false
                 label.text = "\(restTime)"
             } else {
+                label.isHidden = false
                 label.text = "GO"
             }
             // verbally countdown for resttime
@@ -167,47 +218,77 @@ class ViewController: UIViewController {
             // show after 10 rounds 1 minute rest time, else go to exercise countdown
             if restTime != 0 {
                     rest()
+                    label.isHidden = false
                     label.text = "\(restTime)"
             } else {
+                label.isHidden = false
                 label.text = "GO"
             }
             verbalCountdown(restTime)
             
         default :
+            label.isHidden = false
             label.text = "\(counter) seconds "
             exercise()
 
         }
-        // At the start: counter is 31 and input number is (input)
         
-        if counter == (inputNumber){
+        // At the start: counter is 31 and input number is (input)
+        if counter == (inputNumber) && currentExercise != "Pulse" {
             exercise()
             speak("Esercizio")
             AudioServicesPlayAlertSound(SystemSoundID(1333))
         }
         
+        
         // verbally countdown for exercise
         verbalCountdown(counter)
        
         // Reset variables at the end of the round. Round starts with "Ready in" then exercise
-        if counter == 1 {
-            if counter_rounds != 10 {
-                label.text = "Rest"
-                speak("Recupero")
-                exerciseLabel.isHidden = true
-                reset()
-                start()
+            if counter == 1 {
+                if counter_rounds != rounds {
+                    exerciseLabel.isHidden = true
+                    currentExercise = bootyExercise[counter_rounds]
+                    if currentExercise == "Pulse"{
+                        speak("Impulso")
+                    } else {
+                        speak("Recupero")
+                        label.isHidden = false
+                        label.text = "Rest"
+                    }
+                    reset()
+                    start()
+                    counter_rounds += 1
+                    label_rounds.text = "Round: \(counter_rounds)"
+                } else {
+                    counter_rounds = 1
+                    label_rounds.text = "Round: \(counter_rounds)"
+                    label.text = "Completo"
+                    speak("Ciclo completo")
+                    restTime = 60
+                    counter = inputNumber + restTime
+                }
+            }
+        
+        
+        if isBootyOn == true {
+            exerciseLabel.isHidden = false
+            switch currentExercise {
                 
-                counter_rounds += 1
-                label_rounds.text = "Round: \(counter_rounds)"
-            } else {
-                counter_rounds = 1
-                label_rounds.text = "Round: \(counter_rounds)"
-                label.text = "Completo"
-                speak("Ciclo completo")
-                restTime = 60
+            case "Pulse" :
+                inputNumber = 15 + 1
+                counter = inputNumber + restTime
+            case _ where ["Corner Up & Down (Right)", "Corner Up & Down (Left)"].contains(currentExercise) :
+                inputNumber = 60 + 1
+                counter = inputNumber + restTime
+            case _ where ["Forward & Backward Walk", "Side to Side Walk", "Tap Out (Right)", "Tap Out (Left)"].contains(currentExercise):
+                inputNumber = 30 + 1
+                counter = inputNumber + restTime
+            default :
+                inputNumber = 45 + 1
                 counter = inputNumber + restTime
             }
+            
         }
     }
     
@@ -220,7 +301,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        label.text = "Ready?"
+        self.label.text = "Ready?"
         label_rounds.text = "Round: \(counter_rounds)"
         label_total.text = timeString(time: TimeInterval(totalTime))
         
