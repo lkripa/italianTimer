@@ -6,27 +6,22 @@
 //  Copyright © 2019 Lara Riparip. All rights reserved.
 //
 
-
-// THINGS TO DO:
-// it is currently slow after I hid the labels.
-// fix the 0 seconds in the start
-
 import UIKit
 import AVFoundation
 
 class ViewController: UIViewController {
     var timer = Timer()
-    var counter = 31
+    var counter = 31 // default button number of seconds per round
     var counter_rounds = 0
-    var inputNumber = 31
-    var totalTime = 0
-    var setRestTime = 10 //20
-    var restTime = 11 //21
+    var inputNumber = 31 // default button number of seconds per round
+    var totalTime = 0 // total time passed
+    var setRestTime = 10 // 20 repeating rest time
+    var restTime = 11 // 21 initial rest time
     var isTimerRunning = false
     var isExerciseOn = true
-    let audioSession = AVAudioSession.sharedInstance()
     var isBootyOn = false
-    var rounds = 10
+    let audioSession = AVAudioSession.sharedInstance()
+    var rounds = 10 // default number of rounds for one cycle
     let bootyExercise = ["Jumping Squats",
                          "Reverse Lunge Kick (Right)",
                          "Reverse Lunge Kick (Left)",
@@ -112,8 +107,9 @@ class ViewController: UIViewController {
      func speak(_ phrase: String) {
                  let utterance = AVSpeechUtterance(string: phrase)
                  utterance.voice = AVSpeechSynthesisVoice(language:
-                     "it-IT")
-                     //"en-US") // for English language
+                    "it-IT") // for Italian language
+                    //"en-US") // for English language
+                    // "de-DE") // for German language
                  
                  if self.synth.isSpeaking == false {
                      do{
@@ -127,7 +123,7 @@ class ViewController: UIViewController {
     
     // MARK:- Button Activation
     @IBAction func startTimer(sender: UIButton){
-        // check if text field is not hidden and set number if empty
+        // check if text field is not hidden and set number if empty (only for the initial start of app)
         if textfield.isHidden == false {
             if textfield.text!.isEmpty {
                 inputNumber = 31
@@ -138,12 +134,14 @@ class ViewController: UIViewController {
                 counter = inputNumber
                 }
             }
+            // secret setting for activating booty workout
             if self.textfield.text! == "0" {
                 isBootyOn = true
                 rounds = bootyExercise.count
                 currentExercise = bootyExercise[counter_rounds]
                 exerciseLabel.text = currentExercise
                 speak("Preparatevi")
+                restTime = 5
             }
         }
 
@@ -155,7 +153,7 @@ class ViewController: UIViewController {
         isTimerRunning.toggle()
         
         // if button is pressed again, it pauses, else plays
-        // also checking which phase of the exercise user is in
+        // also checking which phase of the exercise user is in after the button pressed
         if isTimerRunning == false {
             timer.invalidate()
             exerciseLabel.isHidden = false
@@ -165,18 +163,16 @@ class ViewController: UIViewController {
         } else {
             start()
             label.isHidden = false
-            if isExerciseOn == true {
-                exerciseLabel.isHidden = false
+            exerciseLabel.isHidden = false
+            if isExerciseOn == true && counter != 0 {
+                speak("Esercizio")
                 if isBootyOn == false {
                     exerciseLabel.text = "Exercise"
-                    speak("Esercizio")
                 } else {
                     exerciseLabel.text = currentExercise
-                    speak("Esercizio")
                 }
             } else {
                 speak("Recupero")
-                exerciseLabel.isHidden = false
                 exerciseLabel.text = "Ready in"
             }
         }
@@ -203,28 +199,33 @@ class ViewController: UIViewController {
         
         case inputNumber..<(inputNumber + setRestTime) :
             // show rest time, else go to exercise countdown
+            label.isHidden = false
             if restTime != 0 {
                 rest()
-                label.isHidden = false
                 label.text = "\(restTime)"
             } else {
-                label.isHidden = false
                 label.text = "GO"
             }
-            // verbally countdown for resttime
+            
+            // verbally countdown for restTime
             verbalCountdown(restTime)
             
         case inputNumber..<(inputNumber + 60):
             // show after 10 rounds 1 minute rest time, else go to exercise countdown
+            label.isHidden = false
             if restTime != 0 {
                     rest()
-                    label.isHidden = false
                     label.text = "\(restTime)"
             } else {
-                label.isHidden = false
                 label.text = "GO"
             }
+            
+            // verbally countdown for restTime
             verbalCountdown(restTime)
+            
+        case 0:
+            // only show timer when seconds is not 0
+            label.isHidden = true
             
         default :
             label.isHidden = false
@@ -233,7 +234,7 @@ class ViewController: UIViewController {
 
         }
         
-        // At the start: counter is 31 and input number is (input)
+        // at the start: counter is 31 and input number is (input)
         if counter == (inputNumber) && currentExercise != "Pulse" {
             exercise()
             speak("Esercizio")
@@ -244,11 +245,14 @@ class ViewController: UIViewController {
         // verbally countdown for exercise
         verbalCountdown(counter)
        
-        // Reset variables at the end of the round. Round starts with "Ready in" then exercise
+        // reset variables at the end of the round. Round starts with "Ready in" then exercise.
+        // 10 rounds is one cycle for a minute break after
             if counter == 1 {
                 if counter_rounds != rounds {
                     exerciseLabel.isHidden = true
-                    currentExercise = bootyExercise[counter_rounds]
+                    if isBootyOn == true {
+                        currentExercise = bootyExercise[counter_rounds]
+                    }
                     if currentExercise == "Pulse"{
                         speak("Impulso")
                     } else {
@@ -270,11 +274,11 @@ class ViewController: UIViewController {
                 }
             }
         
-        
+        // when isBootyOn activated, it will go through the workout and change times accordingly
         if isBootyOn == true {
             exerciseLabel.isHidden = false
+            
             switch currentExercise {
-                
             case "Pulse" :
                 inputNumber = 15 + 1
                 counter = inputNumber + restTime
@@ -310,25 +314,24 @@ class ViewController: UIViewController {
         
         self.view.backgroundColor = UIColor.black
         self.label.textColor = UIColor.black
-        // self.label_total.textColor = UIColor.darkGray
-        // self.label_rounds.textColor = UIColor.darkGray
     
         
         UIApplication.shared.isIdleTimerDisabled = true
         
+        // start listening for keyboard events
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillHideNotification, object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         }
         
-        // Stop listening for keyboard events
+        // stop listening for keyboard events
         deinit {
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
         NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
         }
         
-        // Send a notification that a keyboard event is occuring
+        // send a notification that a keyboard event is occuring
         @objc func keyboardWillChange(notification: Notification) {
             print("Keyboard will show: \(notification.name.rawValue)")
             
