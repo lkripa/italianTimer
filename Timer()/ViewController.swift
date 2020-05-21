@@ -15,11 +15,12 @@ class ViewController: UIViewController {
     var counter_rounds = 0
     var inputNumber = 31 // default button number of seconds per round
     var totalTime = 0 // total time passed
-    var setRestTime = 10 // 20 repeating rest time
-    var restTime = 11 // 21 initial rest time
+    var setRestTime = 10 // 20 - repeating rest time
+    var restTime = 11 // 21 - initial rest time
     var isTimerRunning = false
     var isExerciseOn = true
     var isBootyOn = false
+    var firstExercise = true
     let audioSession = AVAudioSession.sharedInstance()
     var rounds = 10 // default number of rounds for one cycle
     let bootyExercise = ["Jumping Squats",
@@ -141,7 +142,7 @@ class ViewController: UIViewController {
                 currentExercise = bootyExercise[counter_rounds]
                 exerciseLabel.text = currentExercise
                 speak("Preparatevi")
-                restTime = 5
+                restTime = 6
             }
         }
 
@@ -165,11 +166,15 @@ class ViewController: UIViewController {
             label.isHidden = false
             exerciseLabel.isHidden = false
             if isExerciseOn == true && counter != 0 {
-                speak("Esercizio")
+                
                 if isBootyOn == false {
                     exerciseLabel.text = "Exercise"
+                    speak("Esercizio")
                 } else {
                     exerciseLabel.text = currentExercise
+                    if firstExercise == false {
+                        speak("Esercizio")
+                    }
                 }
             } else {
                 speak("Recupero")
@@ -192,6 +197,7 @@ class ViewController: UIViewController {
         label_total.text = timeString(time: TimeInterval(totalTime))
         totalTime += 1
         restTime -= 1
+        firstExercise = false
         
         // When the counter gets to a certain time, case changes.
         switch counter {
