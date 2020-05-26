@@ -68,9 +68,23 @@ class ViewController: UIViewController {
         textField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
         textField.textAlignment = .center
         textField.attributedPlaceholder = NSAttributedString(string: "seconds per round ",
-             attributes: [NSAttributedString.Key.foregroundColor: UIColor.black.withAlphaComponent(0.5), NSAttributedString.Key.font: UIFont(name: "Menlo-Bold", size: 40)!])
+             attributes: [NSAttributedString.Key.foregroundColor: UIColor.black.withAlphaComponent(0.5), NSAttributedString.Key.font: UIFont(name: "Menlo-Bold", size: 41)!])
 
     }
+    // View for the Start of App
+    func setupStartScreen(){
+        label.text = "Ready?"
+        label_rounds.text = "Round: \(counter_rounds)"
+        label_total.text = timeString(time: TimeInterval(totalTime))
+        
+        upNext.isHidden = true
+        exerciseLabel.isHidden = true
+        exerciseLabel.textColor = UIColor.black
+        
+        view.backgroundColor = UIColor.black
+        label.textColor = UIColor.black
+    }
+    
      // Verbal Countdown
      func verbalCountdown(_ number: Int){
         for i in 2...5 {
@@ -338,18 +352,8 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         setupTextField()
-        self.label.text = "Ready?"
-        label_rounds.text = "Round: \(counter_rounds)"
-        label_total.text = timeString(time: TimeInterval(totalTime))
-        
-        self.upNext.isHidden = true
-        self.exerciseLabel.isHidden = true
-        self.exerciseLabel.textColor = UIColor.black
-        
-        self.view.backgroundColor = UIColor.black
-        self.label.textColor = UIColor.black
+        setupStartScreen()
     
-        
         UIApplication.shared.isIdleTimerDisabled = true
         
         // start listening for keyboard events
