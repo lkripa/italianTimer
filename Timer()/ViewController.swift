@@ -81,7 +81,6 @@ class ViewController: UIViewController {
         exerciseLabel.isHidden = true
         exerciseLabel.textColor = UIColor.black
         
-        view.backgroundColor = UIColor.black
         label.textColor = UIColor.black
     }
     
