@@ -48,7 +48,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var label: UILabel!
     @IBOutlet weak var label_rounds: UILabel!
     @IBOutlet weak var label_total: UILabel!
-    @IBOutlet weak var textfield: UITextField!
+    @IBOutlet weak var textField: UITextField!
     @IBOutlet weak var exerciseLabel: UILabel!
     @IBOutlet weak var upNext: UILabel!
     
@@ -59,7 +59,17 @@ class ViewController: UIViewController {
          let seconds = Int(time) % 60
          return String(format:"%02i:%02i:%02i", hours, minutes, seconds)
      }
-     
+    
+    func setupTextField(){
+        textField.layer.cornerRadius = 15.0
+        textField.layer.borderWidth = 1.0
+        textField.backgroundColor = UIColor.white.withAlphaComponent(0.2)
+        textField.contentVerticalAlignment = UIControl.ContentVerticalAlignment.center
+        textField.textAlignment = .center
+        textField.attributedPlaceholder = NSAttributedString(string: "seconds per round ",
+             attributes: [NSAttributedString.Key.foregroundColor: UIColor.black.withAlphaComponent(0.5), NSAttributedString.Key.font: UIFont(name: "Menlo-Bold", size: 40)!])
+
+    }
      // Verbal Countdown
      func verbalCountdown(_ number: Int){
         for i in 2...5 {
@@ -126,18 +136,18 @@ class ViewController: UIViewController {
     // MARK:- Button Activation
     @IBAction func startTimer(sender: UIButton){
         // check if text field is not hidden and set number if empty (only for the initial start of app)
-        if textfield.isHidden == false {
-            if textfield.text!.isEmpty {
+        if textField.isHidden == false {
+            if textField.text!.isEmpty {
                 inputNumber = 31
             } else {
-                inputNumber =  (Int(self.textfield.text!)! + 1)
+                inputNumber =  (Int(self.textField.text!)! + 1)
             
                 if inputNumber != 31 {
                 counter = inputNumber
                 }
             }
             // secret setting for activating booty workout
-            if self.textfield.text! == "0" {
+            if self.textField.text! == "0" {
                 isBootyOn = true
                 rounds = bootyExercise.count
                 currentExercise = bootyExercise[counter_rounds]
@@ -148,7 +158,7 @@ class ViewController: UIViewController {
         }
 
         // hide text field and stop editing
-        textfield.isHidden = true
+        textField.isHidden = true
         self.view.endEditing(true)
         
         // everytime the button is pressed, pause and play are activated
@@ -326,6 +336,7 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        setupTextField()
         self.label.text = "Ready?"
         label_rounds.text = "Round: \(counter_rounds)"
         label_total.text = timeString(time: TimeInterval(totalTime))
