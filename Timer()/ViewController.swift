@@ -50,6 +50,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var label_total: UILabel!
     @IBOutlet weak var textfield: UITextField!
     @IBOutlet weak var exerciseLabel: UILabel!
+    @IBOutlet weak var upNext: UILabel!
     
      // Timer Format
      func timeString(time:TimeInterval) -> String {
@@ -213,12 +214,19 @@ class ViewController: UIViewController {
                 label.text = "GO"
             }
             
+            // prep for next exercise label
+            if isBootyOn == true {
+                upNext.isHidden = false
+                upNext.text = "Up Next: \(currentExercise)"
+            }
+            
             // verbally countdown for restTime
             verbalCountdown(restTime)
             
         case inputNumber..<(inputNumber + 60):
             // show after 10 rounds 1 minute rest time, else go to exercise countdown
             label.isHidden = false
+            upNext.isHidden = true
             if restTime != 0 {
                     rest()
                     label.text = "\(restTime)"
@@ -232,9 +240,11 @@ class ViewController: UIViewController {
         case 0:
             // only show timer when seconds is not 0
             label.isHidden = true
+            upNext.isHidden = true
             
         default :
             label.isHidden = false
+            upNext.isHidden = true
             label.text = "\(counter) seconds "
             exercise()
 
@@ -242,6 +252,7 @@ class ViewController: UIViewController {
         
         // at the start: counter is 31 and input number is (input)
         if counter == (inputNumber) && currentExercise != "Pulse" {
+            upNext.isHidden = true
             exercise()
             speak("Esercizio")
             AudioServicesPlayAlertSound(SystemSoundID(1333))
@@ -272,6 +283,10 @@ class ViewController: UIViewController {
                     label_rounds.text = "Round: \(counter_rounds)"
                 } else {
                     counter_rounds = 1
+                    // restart the round exercises for Booty
+                    if isBootyOn == true{
+                        currentExercise = bootyExercise[0]
+                    }
                     label_rounds.text = "Round: \(counter_rounds)"
                     label.text = "Completo"
                     speak("Ciclo completo")
@@ -315,6 +330,7 @@ class ViewController: UIViewController {
         label_rounds.text = "Round: \(counter_rounds)"
         label_total.text = timeString(time: TimeInterval(totalTime))
         
+        self.upNext.isHidden = true
         self.exerciseLabel.isHidden = true
         self.exerciseLabel.textColor = UIColor.black
         
