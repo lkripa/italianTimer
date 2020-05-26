@@ -60,6 +60,7 @@ class ViewController: UIViewController {
          return String(format:"%02i:%02i:%02i", hours, minutes, seconds)
      }
     
+    // Setup Text Field view
     func setupTextField(){
         textField.layer.cornerRadius = 15.0
         textField.layer.borderWidth = 1.0
