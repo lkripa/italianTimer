@@ -1,6 +1,6 @@
 #  italianTimer
 
-Do you want to have your timer speak to you in Italian? This Italian timer app will tell you when it is time to exercise and when it is time to rest. Choose your seconds per round. 10 rounds is equal to 1 cycle. 
+Do you want to have your timer speak to you in Italian? This Italian timer app will tell you when it is time to exercise and when it is time to rest. Choose your seconds per round. 10 rounds is equal to 1 cycle. After each cycle, there is a one-minute rest time before a new cycle begins.
 
 I've also built in a secert booty workout if you input "0" into the text field.
 

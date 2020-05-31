@@ -313,7 +313,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = lripa.Timer;
+				PRODUCT_BUNDLE_IDENTIFIER = com.lkripa.Esercizio;
 				PRODUCT_NAME = Esercizio;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
